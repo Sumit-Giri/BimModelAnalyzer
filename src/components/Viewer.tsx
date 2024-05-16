@@ -1,5 +1,4 @@
-
-import { Grid } from "@mui/material";
+import { Grid, CircularProgress } from "@mui/material";
 import React, { useState } from "react";
 import { createBucket } from "../api/createBucket";
 import { getMetadata } from "../api/extractMetadata";
@@ -34,6 +33,7 @@ const Viewer: React.FC = () => {
   const [forgeViewer, setForgeViewer] = useState<Autodesk.Viewing.GuiViewer3D | null>(null);
   const [propertiesData, setPropertiesData] = useState<any[]>([]);
   const [updatedPropertyData, setUpdatedPropertyData] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false); // State variable for loading spinner
 
   console.log("urn: ", urn);
 
@@ -41,7 +41,15 @@ const Viewer: React.FC = () => {
   useForgeViewerEffects(urn, forgeViewer);
   useGetAccessTokenEffects(urn, token, setForgeViewer);
   useCreateBucketEffects(getAccessToken, setToken, createBucket);
-  useGetMetadataEffects(urn, token, getProperties, getSpecificProperties, getMetadata, setPropertiesData);
+  useGetMetadataEffects(
+    urn,
+    token,
+    getProperties,
+    getSpecificProperties,
+    getMetadata,
+    setPropertiesData,
+    setIsLoading // Pass setIsLoading to handle loading spinner
+  );
 
   // Render
   return (
@@ -59,16 +67,20 @@ const Viewer: React.FC = () => {
         {/* Modal for Revit files */}
         <RevitModal />
         {/* Table component for displaying properties */}
-        <PropertiesTable
-          propertiesData={propertiesData}
-          updatedPropertyData={updatedPropertyData}
-          setUpdatedPropertyData={setUpdatedPropertyData}
-        />
+        {isLoading ? (
+          // Render loading spinner
+          <CircularProgress style={{ margin: "auto" }} />
+        ) : (
+          // Render properties table when not loading
+          <PropertiesTable
+            propertiesData={propertiesData}
+            updatedPropertyData={updatedPropertyData}
+            setUpdatedPropertyData={setUpdatedPropertyData}
+          />
+        )}
       </Grid>
     </section>
   );
 };
 
 export default Viewer;
-
-

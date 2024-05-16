@@ -98,8 +98,8 @@ const PropertiesTable: React.FC<PropertiesTableProps> = ({
                   <TableCell>Object ID</TableCell>
                   <TableCell>Name</TableCell>
                   <TableCell>Quantity</TableCell>
-                  <TableCell>Cost</TableCell>
-                  <TableCell>Total Cost</TableCell>
+                  <TableCell>Cost(Rs)</TableCell>
+                  <TableCell>Total Cost(Rs)</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>

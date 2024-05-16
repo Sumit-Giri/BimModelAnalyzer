@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { SPECIFIC_QUERY_DATA } from "../model/constants/constants";
 
 // Custom hook to handle effects related to fetching metadata and properties
@@ -8,7 +8,8 @@ function useGetMetadataEffects(
   getProperties: any,
   getSpecificProperties: any,
   getMetadata: any,
-  setPropertiesData: any
+  setPropertiesData: any,
+  setLoading: any // Add setLoading as parameter
 ) {
   useEffect(() => {
     // Function to fetch data
@@ -16,6 +17,9 @@ function useGetMetadataEffects(
       try {
         // Check if URN or token is available
         if (!urn || !token) return;
+
+        // Set loading to true
+        setLoading(true);
 
         // Fetch metadata using access token and URN
         const metadataResponse = await getMetadata(token.access_token, urn);
@@ -92,6 +96,9 @@ function useGetMetadataEffects(
       } catch (error) {
         // Log any errors that occur during data fetching
         console.error("Error fetching data:", error);
+      } finally {
+        // Set loading to false when fetching completes (whether successful or not)
+        setLoading(false);
       }
     };
 
